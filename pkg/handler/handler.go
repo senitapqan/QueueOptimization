@@ -21,7 +21,9 @@ func (h Handler) InitRoutes() *gin.Engine {
 	queue := router.Group("queue")
 	{
 		queue.POST("/", h.CreateQueue)
+		queue.GET("/", h.GetQueueInfo)
 	}
+	
 
 	return router
 }

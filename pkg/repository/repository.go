@@ -8,11 +8,7 @@ import (
 
 type Repository interface {
 	CreateQueue(queue models.Queue) (int, error) 
-	/*GetAllQueues() ([]models.Queue, error) 
-	GetQueueById(id int) (models.Queue, error)
-	UpdateQueue(queue models.Queue) error
-	DeleteQueue(id int) error */
-
+	
 	GetMostFreePlaceByCategoryId(id int) (int, error)
 
 	PredictTime(age, id int) (int, error)

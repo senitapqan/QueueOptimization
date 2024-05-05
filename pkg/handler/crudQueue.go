@@ -25,27 +25,12 @@ func (h *Handler) CreateQueue(c *gin.Context) {
 	c.JSON(http.StatusOK, id)
 }
 
-func (h *Handler) GetAllQueues(c *gin.Context) {
-	
-}
-
-func (h *Handler) GetQueueById(c *gin.Context) {
-	_, err := ValidateId(c)
-	if err != nil {
+func (h *Handler) GetQueueInfo(c *gin.Context) {
+	var input dtos.GetQueueInfoRequest
+	if err := c.BindJSON(&input); err != nil {
 		newErrorResponse(c, http.StatusBadRequest, err.Error())
 		return
 	}
-}
-
-func (h *Handler) UpdateQueue(c *gin.Context) {
+	
 	
 }
-
-func (h *Handler) DeleteQueue(c *gin.Context) {
-	_, err := ValidateId(c)
-	if err != nil {
-		newErrorResponse(c, http.StatusBadRequest, err.Error())
-		return
-	}
-}
-

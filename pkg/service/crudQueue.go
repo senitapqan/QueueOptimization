@@ -69,20 +69,3 @@ func (s *service) CreateQueue(input dtos.CreateQueueRequest) (int, error) {
 
 	return s.repos.CreateQueue(queue)
 }
-
-/*
-func (s *service) GetAllQueues() ([]models.Queue, error) {
-	return s.repos.GetAllQueues()
-}
-
-func (s *service) GetQueueById(id int) (models.Queue, error) {
-	return s.repos.GetQueueById(id)
-}
-
-func (s *service) UpdateQueue(queue models.Queue) error {
-	return s.repos.UpdateQueue(queue)
-}
-
-func (s *service) DeleteQueue(id int) error {
-	return s.repos.DeleteQueue(id)
-}*/
