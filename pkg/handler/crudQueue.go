@@ -26,7 +26,12 @@ func (h *Handler) CreateQueue(c *gin.Context) {
 }
 
 func (h *Handler) GetAllQueues(c *gin.Context) {
-	
+	queues, err := h.service.GetAllQueues()
+	if err != nil {
+		newErrorResponse(c, http.StatusInternalServerError, err.Error())
+		return
+	}
+	c.JSON(http.StatusOK, queues)
 }
 
 func (h *Handler) GetQueueById(c *gin.Context) {
