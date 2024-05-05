@@ -22,8 +22,9 @@ func (h Handler) InitRoutes() *gin.Engine {
 	{
 		queue.POST("/", h.CreateQueue)
 		queue.GET("/", h.GetQueueInfo)
+		queue.GET("/all", h.GetAllQueues)
 	}
-	
+
 
 	return router
 }

@@ -69,3 +69,7 @@ func (s *service) CreateQueue(input dtos.CreateQueueRequest) (int, error) {
 
 	return s.repos.CreateQueue(queue)
 }
+
+func (s *service) getAllQueues() ([]models.Queue, error) {
+	return s.repos.GetAllQueues()
+}

@@ -16,3 +16,11 @@ func (r *repository) CreateQueue(queue models.Queue) (int, error) {
 	}
 	return id, nil
 }
+
+func (r *repository) GetAllQueues() ([]models.Queue, error) {
+	var result []models.Queue
+	query := fmt.Sprintf(`select id, iin from %s`, consts.QueueTable)
+	err := r.db.Select(&result, query)
+
+	return result, err
+}
