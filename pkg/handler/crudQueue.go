@@ -1,82 +1,44 @@
 package handler
 
 import (
-	"encoding/json"
+	"QueueOptimization/dtos"
 	"net/http"
-	"strconv"
-	"QueueOptimization/models"
-	"QueueOptimization/service"
+
+	"github.com/gin-gonic/gin"
 )
 
-type QueueHandler struct {
-	service *service.CRUDQueueService
-}
 
-func NewQueueHandler(service *service.CRUDQueueService) *QueueHandler {
-	return &QueueHandler{service: service}
-}
-
-func (h *QueueHandler) CreateQueue(w http.ResponseWriter, r *http.Request) {
-	var queue models.Queue
-	if err := json.NewDecoder(r.Body).Decode(&queue); err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
+func (h *Handler) CreateQueue(c *gin.Context) {
+	var input dtos.CreateQueueRequest
+	if err := c.BindJSON(&input); err != nil {
+		newErrorResponse(c, http.StatusBadRequest, err.Error())
 		return
 	}
-	id, err := h.service.CreateQueue(queue)
+
+	id, err := h.service.CreateQueue(input)
+}
+
+func (h *Handler) GetAllQueues(c *gin.Context) {
+	
+}
+
+func (h *Handler) GetQueueById(c *gin.Context) {
+	_, err := ValidateId(c)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		newErrorResponse(c, http.StatusBadRequest, err.Error())
 		return
 	}
-	w.WriteHeader(http.StatusCreated)
-	json.NewEncoder(w).Encode(map[string]int{"id": id})
 }
 
-func (h *QueueHandler) GetAllQueues(w http.ResponseWriter, r *http.Request) {
-	queues, err := h.service.GetAllQueues()
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-	json.NewEncoder(w).Encode(queues)
+func (h *Handler) UpdateQueue(c *gin.Context) {
+	
 }
 
-func (h *QueueHandler) GetQueueById(w http.ResponseWriter, r *http.Request) {
-	id, err := strconv.Atoi(r.URL.Query().Get("id"))
+func (h *Handler) DeleteQueue(c *gin.Context) {
+	id, err := ValidateId()
 	if err != nil {
-		http.Error(w, "Invalid queue ID", http.StatusBadRequest)
+		newErrorResponse(c, http.StatusBadRequest, err.Error())
 		return
 	}
-	queue, err := h.service.GetQueueById(id)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-	json.NewEncoder(w).Encode(queue)
-}
-
-func (h *QueueHandler) UpdateQueue(w http.ResponseWriter, r *http.Request) {
-	var queue models.Queue
-	if err := json.NewDecoder(r.Body).Decode(&queue); err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
-		return
-	}
-	if err := h.service.UpdateQueue(queue); err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-	w.WriteHeader(http.StatusOK)
-}
-
-func (h *QueueHandler) DeleteQueue(w http.ResponseWriter, r *http.Request) {
-	id, err := strconv.Atoi(r.URL.Query().Get("id"))
-	if err != nil {
-		http.Error(w, "Invalid queue ID", http.StatusBadRequest)
-		return
-	}
-	if err := h.service.DeleteQueue(id); err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-	w.WriteHeader(http.StatusOK)
 }
 

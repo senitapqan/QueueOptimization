@@ -1,34 +1,78 @@
 package service
 
 import (
+	"QueueOptimization/dtos"
 	"QueueOptimization/models"
-	"QueueOptimization/repository"
+	"fmt"
+	"strconv"
+	"time"
 )
 
-type CRUDQueueService struct {
-	repo *repository.QueueRepository
+func calculateAge(birthDate time.Time) int {
+	today := time.Now()
+	age := today.Year() - birthDate.Year()
+	if today.YearDay() < birthDate.YearDay() {
+		age--
+	}
+	return age
 }
 
-func NewCRUDQueueService(repo *repository.QueueRepository) *CRUDQueueService {
-	return &CRUDQueueService{repo: repo}
+func ParseAgeByIIN(iin string) (int, error){
+	if len(iin) < 6 {
+        return -1, fmt.Errorf("invalid IIN: too short")
+    }
+    year, err := strconv.Atoi(iin[0:2])
+    if err != nil {
+        return -1, err
+    }
+    month, err := strconv.Atoi(iin[2:4])
+    if err != nil {
+        return -1, err
+    }
+    day, err := strconv.Atoi(iin[4:6])
+    if err != nil {
+        return -1, err
+    }
+    if year <= 24 {
+        year += 2000
+    } else {
+		year += 1900
+	}
+
+	birthDate := time.Date(year, time.Month(month), day, 0, 0, 0, 0, time.UTC)
+	return calculateAge(birthDate), nil
 }
 
-func (s *CRUDQueueService) CreateQueue(queue models.Queue) (int, error) {
-	return s.repo.CreateQueue(queue)
+
+func (s *service) CreateQueue(input dtos.CreateQueueRequest) (int, error) {
+	age, err := ParseAgeByIIN(input.IIN)
+
+	predicted_time, err := s.PredictTime(input.CategoryId, age)
+
+	placeId, err := s.GetMostFreePlaceByCategoryId(input.CategoryId)
+
+	if err != nil {
+		return -1, err
+	}
+	
+	queue := models.NewQueue(predicted_time, age, placeId)
+
+	return s.repos.CreateQueue(queue)
 }
 
-func (s *CRUDQueueService) GetAllQueues() ([]models.Queue, error) {
-	return s.repo.GetAllQueues()
+/*
+func (s *service) GetAllQueues() ([]models.Queue, error) {
+	return s.repos.GetAllQueues()
 }
 
-func (s *CRUDQueueService) GetQueueById(id int) (models.Queue, error) {
-	return s.repo.GetQueueById(id)
+func (s *service) GetQueueById(id int) (models.Queue, error) {
+	return s.repos.GetQueueById(id)
 }
 
-func (s *CRUDQueueService) UpdateQueue(queue models.Queue) error {
-	return s.repo.UpdateQueue(queue)
+func (s *service) UpdateQueue(queue models.Queue) error {
+	return s.repos.UpdateQueue(queue)
 }
 
-func (s *CRUDQueueService) DeleteQueue(id int) error {
-	return s.repo.DeleteQueue(id)
-}
+func (s *service) DeleteQueue(id int) error {
+	return s.repos.DeleteQueue(id)
+}*/
