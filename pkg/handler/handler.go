@@ -17,5 +17,11 @@ func NewHandler(serv service.Service) *Handler {
 
 func (h Handler) InitRoutes() *gin.Engine {
 	router := gin.New()
+
+	queue := router.Group("queue")
+	{
+		queue.POST("/", h.CreateQueue)
+	}
+
 	return router
 }

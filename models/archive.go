@@ -11,5 +11,5 @@ type Predictor struct {
 	CategoryId  int    `json:"category_id"`
 	AgeIn       int    `json:"age_in"`
 	AgeOut      int    `json:"age_out"`
-	AverageTime string `json:"average_time"`
+	AverageTime int `json:"average_time"`
 }

@@ -16,6 +16,13 @@ func (h *Handler) CreateQueue(c *gin.Context) {
 	}
 
 	id, err := h.service.CreateQueue(input)
+
+	if err != nil {
+		newErrorResponse(c,http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	c.JSON(http.StatusOK, id)
 }
 
 func (h *Handler) GetAllQueues(c *gin.Context) {
@@ -35,7 +42,7 @@ func (h *Handler) UpdateQueue(c *gin.Context) {
 }
 
 func (h *Handler) DeleteQueue(c *gin.Context) {
-	id, err := ValidateId()
+	_, err := ValidateId(c)
 	if err != nil {
 		newErrorResponse(c, http.StatusBadRequest, err.Error())
 		return

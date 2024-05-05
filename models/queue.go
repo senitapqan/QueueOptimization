@@ -1,16 +1,16 @@
 package models
 
 type Queue struct {
-	Id      int    `json:"id"`
-	PlaceId int    `json:"place_id"`
-	Age     int    `json:"age"`
-	Time    string `json:"time"`
+	Id            int    `json:"id"`
+	PlaceId       int    `json:"place_id"`
+	Age           int    `json:"age"`
+	PredictedTime int `json:"predicted_time"`
 }
 
-func NewQueue(time string, age, id int) Queue {
+func NewQueue(time, age, id int) Queue {
 	return Queue{
-		PlaceId: id,
-		Age: age,
-		Time: time,
+		PlaceId:       id,
+		Age:           age,
+		PredictedTime: time,
 	}
 }

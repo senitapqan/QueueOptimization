@@ -15,7 +15,7 @@ type Repository interface {
 
 	GetMostFreePlaceByCategoryId(id int) (int, error)
 
-	PredictTime(age, id int) (string, error)
+	PredictTime(age, id int) (int, error)
 }
 
 type repository struct {
