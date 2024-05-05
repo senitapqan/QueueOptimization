@@ -1,7 +1,7 @@
-package models;
+package models
 
 type Place struct {
-	Id int64 `json:"id"`
-	PlaceName string `json:"place_name"`
-	CategoryId int64 `json:"category_id"`
+	Id         int `json:"id"`
+	Number     int `json:"place_name"`
+	CategoryId int `json:"category_id"`
 }
