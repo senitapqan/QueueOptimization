@@ -8,7 +8,8 @@ import (
 
 type Service interface {
 	CreateQueue(queue dtos.CreateQueueRequest) (int, error) 
-	
+	GetQueueInfo(iin string) (dtos.GetQueueInfoResponse, error)
+
 	GetMostFreePlaceByCategoryId(id int) (int, error)
 }
 

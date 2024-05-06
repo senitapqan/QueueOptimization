@@ -70,6 +70,8 @@ func (s *service) CreateQueue(input dtos.CreateQueueRequest) (int, error) {
 	return s.repos.CreateQueue(queue)
 }
 
-func (s *service) getAllQueues() ([]models.Queue, error) {
-	return s.repos.GetAllQueues()
+func (s *service) GetQueueInfo(iin string) (dtos.GetQueueInfoResponse, error) {
+	log.Print("service send request to response")
+	log.Print(iin)
+	return s.repos.GetQueueInfo(iin)
 }

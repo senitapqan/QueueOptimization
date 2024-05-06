@@ -1,8 +1,11 @@
 package handler
 
 import (
+	"QueueOptimization/dtos"
 	"errors"
+	"log"
 	"strconv"
+
 	"github.com/gin-gonic/gin"
 )
 
@@ -29,4 +32,13 @@ func ValidateId(c *gin.Context) (int, error) {
 		return -1, errors.New("id cannot be negative")
 	}
 	return id, nil
+}
+
+func ValidateIIN(c *gin.Context, input *dtos.GetQueueInfoRequest) error {
+	iin := c.Query("iin")
+
+	log.Print("g" + iin)
+	input.IIN = iin
+
+	return nil
 }

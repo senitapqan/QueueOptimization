@@ -2,6 +2,7 @@ package handler
 
 import (
 	"QueueOptimization/dtos"
+	"log"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -24,24 +25,23 @@ func (h *Handler) CreateQueue(c *gin.Context) {
 	c.JSON(http.StatusOK, id)
 }
 
-// func (h *Handler) GetQueueInfo(c *gin.Context) {
-// 	var input dtos.GetQueueInfoRequest
-// 	if err := c.BindJSON(&input); err != nil {
+func (h *Handler) GetQueueInfo(c *gin.Context) {
+	var input dtos.GetQueueInfoRequest
+	err := ValidateIIN(c, &input)
 
-func (h *Handler) GetAllQueues(c *gin.Context) {
-	queues, err := h.service.getAllQueues()
-	if err != nil {
-		newErrorResponse(c, http.StatusInternalServerError, err.Error())
-		return
-	}
-	c.JSON(http.StatusOK, queues)
-}
-
-func (h *Handler) GetQueueById(c *gin.Context) {
-	_, err := ValidateId(c)
 	if err != nil {
 		newErrorResponse(c, http.StatusBadRequest, err.Error())
 		return
 	}
 
+	log.Print(input.IIN)
+
+	info, err := h.service.GetQueueInfo(input.IIN)
+
+	if err != nil {
+		newErrorResponse(c, http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	c.JSON(http.StatusOK, info)
 }

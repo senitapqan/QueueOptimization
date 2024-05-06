@@ -10,6 +10,6 @@ type GetQueueInfoRequest struct {
 }
 
 type GetQueueInfoResponse struct {
-	PeopleCount int `json:"people_count"`
-	TimeCount   int `json:"time_count"`
+	PeopleCount int  `json:"people_count" db:"people_count"`
+	TimeCount   *int `json:"time_count" db:"time_count"`
 }
